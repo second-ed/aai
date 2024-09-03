@@ -1,12 +1,4 @@
-
-import os
 import re
-from itertools import chain
-from typing import Optional
-
-import attr
-import nbformat
-from attr.validators import deep_iterable, instance_of, optional
 from pathlib import Path
 
 import black

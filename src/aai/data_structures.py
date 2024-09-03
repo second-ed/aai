@@ -1,19 +1,22 @@
-
 import os
-import re
-from itertools import chain
-from typing import Optional
-from black import InvalidInput
+
 import attr
 import nbformat
 from attr.validators import deep_iterable, instance_of, optional
+from black import InvalidInput
+
 from . import utils
+
 
 @attr.define
 class MarkdownPoint:
-    unit: list[int] = attr.ib(validator=[instance_of(list)], converter=utils.convert_unit)
+    unit: list[int] = attr.ib(
+        validator=[instance_of(list)], converter=utils.convert_unit
+    )
     point: str = attr.ib(validator=[instance_of(str)])
-    source: str | None = attr.ib(default=None, validator=[optional(instance_of(str))])
+    source: str | None = attr.ib(
+        default=None, validator=[optional(instance_of(str))]
+    )
 
     def create_source_link(self, refs: dict) -> str:
         mod_point = self.point.strip(".")
@@ -26,9 +29,15 @@ class MarkdownPoint:
 
 @attr.define
 class CodeSnippet:
-    unit: list[int] = attr.ib(validator=[instance_of(list)], converter=utils.convert_unit)
-    snippet: str = attr.ib(validator=[instance_of(str)], converter=utils.format_code_string)
-    source: str | None = attr.ib(default=None, validator=[optional(instance_of(str))])
+    unit: list[int] = attr.ib(
+        validator=[instance_of(list)], converter=utils.convert_unit
+    )
+    snippet: str = attr.ib(
+        validator=[instance_of(str)], converter=utils.format_code_string
+    )
+    source: str | None = attr.ib(
+        default=None, validator=[optional(instance_of(str))]
+    )
 
 
 @attr.define
@@ -62,11 +71,7 @@ class Module:
 
             if isinstance(item, MarkdownPoint):
                 item.create_source_link(self.refs)
-                self.cells.append(
-                    nbformat.v4.new_markdown_cell(
-                        item.point
-                    )
-                )
+                self.cells.append(nbformat.v4.new_markdown_cell(item.point))
 
     def get_bib(self):
         bib = ["\n\n## References"]
@@ -86,20 +91,16 @@ class Module:
         nbformat.write(self.notebook, f"{out_folder}/{filename}.ipynb")
 
 
-def create_markdown_point(unit_code, text: str, source: str | None) -> MarkdownPoint:
-    return MarkdownPoint(
-        str(unit_code),
-        text,
-        source
-    )
+def create_markdown_point(
+    unit_code, text: str, source: str | None
+) -> MarkdownPoint:
+    return MarkdownPoint(str(unit_code), text, source)
 
 
-def create_code_snippet(unit_code, code_snippet: str, source: str | None) -> CodeSnippet | None:
+def create_code_snippet(
+    unit_code, code_snippet: str, source: str | None
+) -> CodeSnippet | None:
     try:
-        return CodeSnippet(
-            str(unit_code),
-            code_snippet,
-            source
-        )
+        return CodeSnippet(str(unit_code), code_snippet, source)
     except InvalidInput as e:
         print(f"{e} for {code_snippet}")
