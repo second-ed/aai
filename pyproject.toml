@@ -1,0 +1,46 @@
+[project]
+name = "aai"
+authors = [
+    {name="ed cuss"},
+]
+description = ""
+readme = "README.md"
+requires-python = ">=3.8"
+version = "0.0.1"
+dependencies = [
+    "pyyaml",
+]
+
+[project.optional-dependencies]
+test = [
+    "pytest",
+    "pytest-cov",
+    "hypothesis",    
+]
+lint = [
+    "pre-commit",
+    "black<24",
+    "ruff",
+]
+dev = [
+    "aai[test,lint]",
+]
+
+[tool.black]
+line-length = 79
+
+[tool.ruff]
+lint.extend-select = ["I", "W"]
+lint.ignore = ["E741"]
+line-length = 79
+
+[tool.coverage.run]
+branch = true
+source=["src"]
+omit=[
+    "*_logger.py",
+    "*config.py",
+]
+
+[tool.coverage.report]
+show_missing=true
