@@ -41,11 +41,29 @@ class CodeSnippet:
 
 
 @attr.define
+class ImageLink:
+    unit: list[int] = attr.ib(
+        validator=[instance_of(list)], converter=utils.convert_unit
+    )
+    point: str = attr.ib(validator=[instance_of(str)])
+    source: str | None = attr.ib(
+        default=None, validator=[optional(instance_of(str))]
+    )
+
+    def create_source_link(self, refs: dict) -> str:
+        mod_point = f"![[]]({self.point})"
+        if self.source:
+            i = utils.get_ref_number(refs, self)
+            return f"{mod_point} [[{i}]]({self.source})\n\n"
+        return f"{mod_point}\n\n"
+
+
+@attr.define
 class Module:
-    points: list[MarkdownPoint | CodeSnippet] = attr.ib(
+    points: list[MarkdownPoint | CodeSnippet | ImageLink] = attr.ib(
         validator=[
             deep_iterable(
-                member_validator=instance_of((MarkdownPoint, CodeSnippet)),
+                member_validator=instance_of((MarkdownPoint, CodeSnippet, ImageLink)),
                 iterable_validator=instance_of(list),
             )
         ]
@@ -69,9 +87,8 @@ class Module:
                     )
                 )
 
-            if isinstance(item, MarkdownPoint):
-                item.create_source_link(self.refs)
-                self.cells.append(nbformat.v4.new_markdown_cell(item.point))
+            if isinstance(item, (MarkdownPoint, ImageLink)):
+                self.cells.append(nbformat.v4.new_markdown_cell(item.create_source_link(self.refs)))
 
     def get_bib(self):
         bib = ["\n\n## References"]
@@ -104,3 +121,9 @@ def create_code_snippet(
         return CodeSnippet(str(unit_code), code_snippet, source)
     except InvalidInput as e:
         print(f"{e} for {code_snippet}")
+
+
+def create_image_link(
+    unit_code, text: str, source: str | None
+) -> ImageLink:
+    return ImageLink(str(unit_code), text, source)
