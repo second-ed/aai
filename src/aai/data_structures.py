@@ -73,6 +73,7 @@ class Module:
     notebook: nbformat.NotebookNode = attr.ib(
         default=nbformat.v4.new_notebook()
     )
+    unit: str | None = attr.ib(default=None, validator=[optional(instance_of(str))])
 
     def __attrs_post_init__(self) -> None:
         self.refs = {}
@@ -80,6 +81,7 @@ class Module:
 
     def populate_cells(self):
         for item in self.points:
+            self.set_curr_unit(item.unit)
             if isinstance(item, CodeSnippet):
                 self.cells.append(
                     nbformat.v4.new_code_cell(
@@ -97,6 +99,12 @@ class Module:
             bib.append(f"[{ref}] {link}")
 
         self.cells.append(nbformat.v4.new_markdown_cell("\n\n".join(bib)))
+
+    def set_curr_unit(self, unit) -> None:
+        curr_unit = ".".join(list(map(str, unit)))
+        if curr_unit != self.unit:
+            self.cells.append(nbformat.v4.new_markdown_cell(f"# {curr_unit}"))
+            self.unit = curr_unit
 
     def generate_notebook(self):
         self.populate_cells()
