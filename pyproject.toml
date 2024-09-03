@@ -20,7 +20,7 @@ test = [
 ]
 lint = [
     "pre-commit",
-    "black>=24, 25",
+    "black>=24, <25",
     "ruff",
 ]
 dev = [
