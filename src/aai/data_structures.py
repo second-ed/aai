@@ -3,7 +3,7 @@ import os
 import attr
 import nbformat
 from attr.validators import deep_iterable, instance_of, optional
-from black import InvalidInput
+from black.parsing import InvalidInput
 
 from . import utils
 
