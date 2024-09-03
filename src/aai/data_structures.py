@@ -51,7 +51,7 @@ class ImageLink:
     )
 
     def create_source_link(self, refs: dict) -> str:
-        mod_point = f"![[]]({self.point})"
+        mod_point = f"![image]({self.point})"
         if self.source:
             i = utils.get_ref_number(refs, self)
             return f"{mod_point} [[{i}]]({self.source})\n\n"
