@@ -63,7 +63,9 @@ class Module:
     points: list[MarkdownPoint | CodeSnippet | ImageLink] = attr.ib(
         validator=[
             deep_iterable(
-                member_validator=instance_of((MarkdownPoint, CodeSnippet, ImageLink)),
+                member_validator=instance_of(
+                    (MarkdownPoint, CodeSnippet, ImageLink)
+                ),
                 iterable_validator=instance_of(list),
             )
         ]
@@ -73,7 +75,9 @@ class Module:
     notebook: nbformat.NotebookNode = attr.ib(
         default=nbformat.v4.new_notebook()
     )
-    unit: str | None = attr.ib(default=None, validator=[optional(instance_of(str))])
+    unit: str | None = attr.ib(
+        default=None, validator=[optional(instance_of(str))]
+    )
 
     def __attrs_post_init__(self) -> None:
         self.refs = {}
@@ -90,7 +94,11 @@ class Module:
                 )
 
             if isinstance(item, (MarkdownPoint, ImageLink)):
-                self.cells.append(nbformat.v4.new_markdown_cell(item.create_source_link(self.refs)))
+                self.cells.append(
+                    nbformat.v4.new_markdown_cell(
+                        item.create_source_link(self.refs)
+                    )
+                )
 
     def get_bib(self):
         bib = ["\n\n## References"]
@@ -131,7 +139,5 @@ def create_code_snippet(
         print(f"{e} for {code_snippet}")
 
 
-def create_image_link(
-    unit_code, text: str, source: str | None
-) -> ImageLink:
+def create_image_link(unit_code, text: str, source: str | None) -> ImageLink:
     return ImageLink(str(unit_code), text, source)

@@ -8,8 +8,9 @@ readme = "README.md"
 requires-python = ">=3.8"
 version = "0.0.1"
 dependencies = [
-    "attrs >=23.2.0, <24"
+    "attrs >=23.2.0, <24",
     "nbformat >=5.10.4, <6",
+    "black>=24, <25",
 ]
 
 [project.optional-dependencies]
@@ -20,7 +21,6 @@ test = [
 ]
 lint = [
     "pre-commit",
-    "black>=24, 25",
     "ruff",
 ]
 dev = [
