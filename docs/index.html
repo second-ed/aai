@@ -14665,6 +14665,177 @@ e.g.</p>
 <p><img src="https://miro.medium.com/v2/resize:fit:1400/1*VM84VPcCQe0gSy44l9S5yA.jpeg" alt="image"> <a href="https://medium.com/basecs/breaking-down-breadth-first-search-cebe696709d9">[2]</a></p>
 
 </div>
+</div><div class="jp-Cell jp-CodeCell jp-Notebook-cell   ">
+<div class="jp-Cell-inputWrapper">
+<div class="jp-InputArea jp-Cell-inputArea">
+<div class="jp-InputPrompt jp-InputArea-prompt">In&nbsp;[&nbsp;]:</div>
+<div class="jp-CodeMirrorEditor jp-Editor jp-InputArea-editor" data-type="inline">
+     <div class="CodeMirror cm-s-jupyter">
+<div class=" highlight hl-ipython3"><pre><span></span><span class="c1"># source: None</span>
+<span class="kn">from</span> <span class="nn">attrs</span> <span class="kn">import</span> <span class="n">define</span><span class="p">,</span> <span class="n">field</span>
+<span class="kn">from</span> <span class="nn">attrs.validators</span> <span class="kn">import</span> <span class="n">instance_of</span><span class="p">,</span> <span class="n">optional</span>
+
+
+<span class="nd">@define</span>
+<span class="k">class</span> <span class="nc">Node</span><span class="p">:</span>
+    <span class="n">name</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="n">field</span><span class="p">(</span><span class="n">validator</span><span class="o">=</span><span class="n">instance_of</span><span class="p">(</span><span class="nb">str</span><span class="p">))</span>
+    <span class="n">parent</span><span class="p">:</span> <span class="nb">str</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="n">field</span><span class="p">(</span><span class="n">default</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">validator</span><span class="o">=</span><span class="n">optional</span><span class="p">(</span><span class="n">instance_of</span><span class="p">(</span><span class="nb">str</span><span class="p">)))</span>
+    <span class="n">children</span><span class="p">:</span> <span class="nb">list</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="n">field</span><span class="p">(</span><span class="n">default</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">validator</span><span class="o">=</span><span class="n">optional</span><span class="p">(</span><span class="n">instance_of</span><span class="p">(</span><span class="nb">list</span><span class="p">)))</span>
+    <span class="n">goal</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="n">field</span><span class="p">(</span><span class="n">default</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">validator</span><span class="o">=</span><span class="n">instance_of</span><span class="p">(</span><span class="nb">bool</span><span class="p">))</span>
+
+
+<span class="n">conns</span> <span class="o">=</span> <span class="p">{</span>
+    <span class="s2">&quot;A&quot;</span><span class="p">:</span> <span class="p">[</span><span class="s2">&quot;B&quot;</span><span class="p">,</span> <span class="s2">&quot;C&quot;</span><span class="p">,</span> <span class="s2">&quot;D&quot;</span><span class="p">,</span> <span class="s2">&quot;E&quot;</span><span class="p">],</span>
+    <span class="s2">&quot;B&quot;</span><span class="p">:</span> <span class="p">[</span><span class="s2">&quot;F&quot;</span><span class="p">,</span> <span class="s2">&quot;G&quot;</span><span class="p">],</span>
+    <span class="s2">&quot;C&quot;</span><span class="p">:</span> <span class="p">[</span><span class="s2">&quot;H&quot;</span><span class="p">,</span> <span class="s2">&quot;I&quot;</span><span class="p">],</span>
+    <span class="s2">&quot;D&quot;</span><span class="p">:</span> <span class="p">[</span><span class="s2">&quot;J&quot;</span><span class="p">,</span> <span class="s2">&quot;K&quot;</span><span class="p">],</span>
+    <span class="s2">&quot;E&quot;</span><span class="p">:</span> <span class="p">[</span><span class="s2">&quot;L&quot;</span><span class="p">,</span> <span class="s2">&quot;M&quot;</span><span class="p">],</span>
+    <span class="s2">&quot;F&quot;</span><span class="p">:</span> <span class="p">[</span><span class="s2">&quot;N&quot;</span><span class="p">],</span>
+    <span class="s2">&quot;G&quot;</span><span class="p">:</span> <span class="p">[</span><span class="s2">&quot;O&quot;</span><span class="p">],</span>
+    <span class="s2">&quot;H&quot;</span><span class="p">:</span> <span class="p">[</span><span class="s2">&quot;P&quot;</span><span class="p">,</span> <span class="s2">&quot;Q&quot;</span><span class="p">],</span>
+    <span class="s2">&quot;I&quot;</span><span class="p">:</span> <span class="p">[],</span>
+    <span class="s2">&quot;J&quot;</span><span class="p">:</span> <span class="p">[</span><span class="s2">&quot;R&quot;</span><span class="p">],</span>
+    <span class="s2">&quot;K&quot;</span><span class="p">:</span> <span class="p">[</span><span class="s2">&quot;S&quot;</span><span class="p">],</span>
+    <span class="s2">&quot;L&quot;</span><span class="p">:</span> <span class="p">[],</span>
+    <span class="s2">&quot;M&quot;</span><span class="p">:</span> <span class="p">[</span><span class="s2">&quot;T&quot;</span><span class="p">],</span>
+    <span class="s2">&quot;N&quot;</span><span class="p">:</span> <span class="p">[],</span>
+    <span class="s2">&quot;O&quot;</span><span class="p">:</span> <span class="p">[],</span>
+    <span class="s2">&quot;P&quot;</span><span class="p">:</span> <span class="p">[],</span>
+    <span class="s2">&quot;Q&quot;</span><span class="p">:</span> <span class="p">[],</span>
+    <span class="s2">&quot;R&quot;</span><span class="p">:</span> <span class="p">[],</span>
+    <span class="s2">&quot;S&quot;</span><span class="p">:</span> <span class="p">[],</span>
+    <span class="s2">&quot;T&quot;</span><span class="p">:</span> <span class="p">[],</span>
+<span class="p">}</span>
+
+<span class="n">goal</span> <span class="o">=</span> <span class="s2">&quot;H&quot;</span>
+
+<span class="n">graph</span> <span class="o">=</span> <span class="p">{}</span>
+
+<span class="k">for</span> <span class="n">curr</span><span class="p">,</span> <span class="n">children</span> <span class="ow">in</span> <span class="n">conns</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
+    <span class="k">if</span> <span class="n">curr</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">graph</span><span class="p">:</span>
+        <span class="n">graph</span><span class="p">[</span><span class="n">curr</span><span class="p">]</span> <span class="o">=</span> <span class="n">Node</span><span class="p">(</span><span class="n">curr</span><span class="p">,</span> <span class="n">children</span><span class="o">=</span><span class="n">children</span><span class="p">)</span>
+    <span class="k">for</span> <span class="n">child</span> <span class="ow">in</span> <span class="n">children</span><span class="p">:</span>
+        <span class="n">graph</span><span class="p">[</span><span class="n">child</span><span class="p">]</span> <span class="o">=</span> <span class="n">Node</span><span class="p">(</span><span class="n">child</span><span class="p">,</span> <span class="n">parent</span><span class="o">=</span><span class="n">curr</span><span class="p">,</span> <span class="n">children</span><span class="o">=</span><span class="n">conns</span><span class="p">[</span><span class="n">child</span><span class="p">])</span>
+
+
+<span class="n">graph</span><span class="p">[</span><span class="n">goal</span><span class="p">]</span><span class="o">.</span><span class="n">goal</span> <span class="o">=</span> <span class="kc">True</span>
+
+<span class="n">found</span> <span class="o">=</span> <span class="kc">False</span>
+<span class="n">stack</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;A&quot;</span><span class="p">]</span>
+<span class="n">explored</span> <span class="o">=</span> <span class="p">[]</span>
+
+<span class="k">while</span> <span class="ow">not</span> <span class="n">found</span><span class="p">:</span>
+    <span class="n">curr_node</span> <span class="o">=</span> <span class="n">stack</span><span class="o">.</span><span class="n">pop</span><span class="p">()</span>
+    <span class="n">explored</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">curr_node</span><span class="p">)</span>
+    <span class="k">if</span> <span class="n">graph</span><span class="p">[</span><span class="n">curr_node</span><span class="p">]</span><span class="o">.</span><span class="n">goal</span><span class="p">:</span>
+        <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;found goal </span><span class="si">{</span><span class="n">curr_node</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+        <span class="k">break</span>
+
+    <span class="k">for</span> <span class="n">child</span> <span class="ow">in</span> <span class="n">graph</span><span class="p">[</span><span class="n">curr_node</span><span class="p">]</span><span class="o">.</span><span class="n">children</span><span class="p">:</span>
+        <span class="n">stack</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">child</span><span class="p">)</span>
+
+    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">curr_node</span><span class="w"> </span><span class="si">= }</span><span class="s2">&quot;</span><span class="p">)</span>
+    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">stack</span><span class="w"> </span><span class="si">= }</span><span class="s2">&quot;</span><span class="p">)</span>
+    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">explored</span><span class="w"> </span><span class="si">= }</span><span class="se">\n\n</span><span class="s2">&quot;</span><span class="p">)</span>
+</pre></div>
+
+     </div>
+</div>
+</div>
+</div>
+
+<div class="jp-Cell-outputWrapper">
+
+
+<div class="jp-OutputArea jp-Cell-outputArea">
+
+<div class="jp-OutputArea-child">
+
+    
+    <div class="jp-OutputPrompt jp-OutputArea-prompt"></div>
+
+
+<div class="jp-RenderedText jp-OutputArea-output" data-mime-type="text/plain">
+<pre>curr_node = &#39;A&#39;
+stack = [&#39;B&#39;, &#39;C&#39;, &#39;D&#39;, &#39;E&#39;]
+explored = [&#39;A&#39;]
+
+
+curr_node = &#39;E&#39;
+stack = [&#39;B&#39;, &#39;C&#39;, &#39;D&#39;, &#39;L&#39;, &#39;M&#39;]
+explored = [&#39;A&#39;, &#39;E&#39;]
+
+
+curr_node = &#39;M&#39;
+stack = [&#39;B&#39;, &#39;C&#39;, &#39;D&#39;, &#39;L&#39;, &#39;T&#39;]
+explored = [&#39;A&#39;, &#39;E&#39;, &#39;M&#39;]
+
+
+curr_node = &#39;T&#39;
+stack = [&#39;B&#39;, &#39;C&#39;, &#39;D&#39;, &#39;L&#39;]
+explored = [&#39;A&#39;, &#39;E&#39;, &#39;M&#39;, &#39;T&#39;]
+
+
+curr_node = &#39;L&#39;
+stack = [&#39;B&#39;, &#39;C&#39;, &#39;D&#39;]
+explored = [&#39;A&#39;, &#39;E&#39;, &#39;M&#39;, &#39;T&#39;, &#39;L&#39;]
+
+
+curr_node = &#39;D&#39;
+stack = [&#39;B&#39;, &#39;C&#39;, &#39;J&#39;, &#39;K&#39;]
+explored = [&#39;A&#39;, &#39;E&#39;, &#39;M&#39;, &#39;T&#39;, &#39;L&#39;, &#39;D&#39;]
+
+
+curr_node = &#39;K&#39;
+stack = [&#39;B&#39;, &#39;C&#39;, &#39;J&#39;, &#39;S&#39;]
+explored = [&#39;A&#39;, &#39;E&#39;, &#39;M&#39;, &#39;T&#39;, &#39;L&#39;, &#39;D&#39;, &#39;K&#39;]
+
+
+curr_node = &#39;S&#39;
+stack = [&#39;B&#39;, &#39;C&#39;, &#39;J&#39;]
+explored = [&#39;A&#39;, &#39;E&#39;, &#39;M&#39;, &#39;T&#39;, &#39;L&#39;, &#39;D&#39;, &#39;K&#39;, &#39;S&#39;]
+
+
+curr_node = &#39;J&#39;
+stack = [&#39;B&#39;, &#39;C&#39;, &#39;R&#39;]
+explored = [&#39;A&#39;, &#39;E&#39;, &#39;M&#39;, &#39;T&#39;, &#39;L&#39;, &#39;D&#39;, &#39;K&#39;, &#39;S&#39;, &#39;J&#39;]
+
+
+curr_node = &#39;R&#39;
+stack = [&#39;B&#39;, &#39;C&#39;]
+explored = [&#39;A&#39;, &#39;E&#39;, &#39;M&#39;, &#39;T&#39;, &#39;L&#39;, &#39;D&#39;, &#39;K&#39;, &#39;S&#39;, &#39;J&#39;, &#39;R&#39;]
+
+
+curr_node = &#39;C&#39;
+stack = [&#39;B&#39;, &#39;H&#39;, &#39;I&#39;]
+explored = [&#39;A&#39;, &#39;E&#39;, &#39;M&#39;, &#39;T&#39;, &#39;L&#39;, &#39;D&#39;, &#39;K&#39;, &#39;S&#39;, &#39;J&#39;, &#39;R&#39;, &#39;C&#39;]
+
+
+curr_node = &#39;I&#39;
+stack = [&#39;B&#39;, &#39;H&#39;]
+explored = [&#39;A&#39;, &#39;E&#39;, &#39;M&#39;, &#39;T&#39;, &#39;L&#39;, &#39;D&#39;, &#39;K&#39;, &#39;S&#39;, &#39;J&#39;, &#39;R&#39;, &#39;C&#39;, &#39;I&#39;]
+
+
+found goal H
+</pre>
+</div>
+</div>
+
+</div>
+
+</div>
+
+</div>
+<div class="jp-Cell-inputWrapper"><div class="jp-InputPrompt jp-InputArea-prompt">
+</div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput " data-mime-type="text/markdown">
+<h1 id="2.3.0">2.3.0<a class="anchor-link" href="#2.3.0">&#182;</a></h1>
+</div>
+</div>
+<div class="jp-Cell-inputWrapper"><div class="jp-InputPrompt jp-InputArea-prompt">
+</div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput " data-mime-type="text/markdown">
+<p><img src="https://miro.medium.com/v2/resize:fit:1304/1*lQYXZssxKAk-Zje-hxIiNw.png" alt="image"> <a href="https://shivharibaral.medium.com/informed-search-vs-uninformed-search-in-ai-802f95260304">[3]</a></p>
+
+</div>
 </div>
 <div class="jp-Cell-inputWrapper"><div class="jp-InputPrompt jp-InputArea-prompt">
 </div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput " data-mime-type="text/markdown">
@@ -14673,7 +14844,7 @@ e.g.</p>
 </div>
 <div class="jp-Cell-inputWrapper"><div class="jp-InputPrompt jp-InputArea-prompt">
 </div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput " data-mime-type="text/markdown">
-<p><img src="https://miro.medium.com/v2/resize:fit:1400/1*QvF-25wEHhQiWowGeJ8JjQ.png" alt="image"> <a href="https://yuminlee2.medium.com/a-search-algorithm-42c1a13fcf9f">[3]</a></p>
+<p><img src="https://miro.medium.com/v2/resize:fit:1400/1*QvF-25wEHhQiWowGeJ8JjQ.png" alt="image"> <a href="https://yuminlee2.medium.com/a-search-algorithm-42c1a13fcf9f">[4]</a></p>
 
 </div>
 </div>
@@ -14681,7 +14852,8 @@ e.g.</p>
 </div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput " data-mime-type="text/markdown">
 <h2 id="References">References<a class="anchor-link" href="#References">&#182;</a></h2><p>[1] <a href="https://www.techtarget.com/searchenterpriseai/definition/Turing-test">https://www.techtarget.com/searchenterpriseai/definition/Turing-test</a></p>
 <p>[2] <a href="https://medium.com/basecs/breaking-down-breadth-first-search-cebe696709d9">https://medium.com/basecs/breaking-down-breadth-first-search-cebe696709d9</a></p>
-<p>[3] <a href="https://yuminlee2.medium.com/a-search-algorithm-42c1a13fcf9f">https://yuminlee2.medium.com/a-search-algorithm-42c1a13fcf9f</a></p>
+<p>[3] <a href="https://shivharibaral.medium.com/informed-search-vs-uninformed-search-in-ai-802f95260304">https://shivharibaral.medium.com/informed-search-vs-uninformed-search-in-ai-802f95260304</a></p>
+<p>[4] <a href="https://yuminlee2.medium.com/a-search-algorithm-42c1a13fcf9f">https://yuminlee2.medium.com/a-search-algorithm-42c1a13fcf9f</a></p>
 
 </div>
 </div>
